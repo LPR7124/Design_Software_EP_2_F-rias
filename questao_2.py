@@ -1,4 +1,3 @@
-from questao_1 import *
 def valida_questao (questao):
     dic_final = {}
     
@@ -21,6 +20,8 @@ def valida_questao (questao):
     if 'opcoes' not in questao:
         dic_final['opcoes'] = 'nao_encontrado'
     else:
+        #Guardar o dicionário de opções da questão numa variável
+        opcoes = questao['opcoes']
         if len(opcoes) != 4:
             dic_final['opcoes'] = 'tamanho_invalido'
         #Se existir, tiver o tamanho 4 mas não tiver notas (letras) válidas
