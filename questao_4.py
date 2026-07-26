@@ -4,7 +4,7 @@ from questao_3 import *
 
 import random
 def sorteia_questao (questoes_nivel, nivel):
-    # Pego no dic de questões um nivel dado
+    # Pega no dic de questões um nivel dado
     lista_nivel = questoes_nivel[nivel]
 
     #Uso a função randint para fazer o sorteio : sorteia um indice aleatório 
