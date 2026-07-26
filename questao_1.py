@@ -3,10 +3,14 @@ def transforma_base (lista_dics):
     lista_niveis = {}
 
     for dic in lista_dics:
-        nivel = dic['nivel'] #para pegar os values da key  'nivel'
-        if nivel not in lista_niveis: # se não tiver sido adicionado na lista nova 
-            lista_niveis[nivel] = [] #adiciona uma lista nova e vazia ao dic
-        lista_niveis[nivel].append(dic) # senão: adiciona o dic todo
+        #para pegar os values da key  'nivel'
+        nivel = dic['nivel'] 
+        # se não tiver sido adicionado na lista nova 
+        if nivel not in lista_niveis: 
+            #adiciona uma lista nova e vazia ao dic
+            lista_niveis[nivel] = [] 
+        # senão: adiciona o dic todo
+        lista_niveis[nivel].append(dic) 
     return lista_niveis
 
 
