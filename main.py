@@ -24,13 +24,24 @@ from questao_7 import *
 #Pega o banco de questões bruto (lista) e transforma em um dicionário que divide questões por nível
 lista_questoes = banco_de_perguntas  # Recebe a lista de perguntas do módulo banco_de_perguntas
 
-#Filtra por nível (dicionário)
-questoes_niveis = transforma_base(lista_questoes)  
+#Valida a base de perguntas antes de iniciar o jogo
+validacoes = valida_questoes(lista_questoes)
+if any(validacoes):
+    print('Base de perguntas inválida. Verifique os erros abaixo:')
+    for i, erro in enumerate(validacoes, start=1):
+        if erro:
+            print(f'Questão {i}: {erro}')
+    continuar = 'exit'
+else:
+    #Filtra por nível (dicionário)
+    questoes_niveis = transforma_base(lista_questoes)  
 
 #ganhos disponíveis caso a resposta esteja certa 
 premios = [1000.00, 5000.00, 10000.00, 30000.00, 50000.00, 100000.00, 300000.00, 500000.00, 1000000.00] 
 # Índice atual na lista de prêmios
-indice_premio = 0  
+indice_premio = -1  
+# Valor atual do prêmio do jogador
+premio_inicial = 0.00
 # Total de pulos disponíveis
 pulos = 3  
 # Total de ajudas disponíveis
@@ -52,15 +63,15 @@ while continuar != 'exit':
 
     # Controla para ver se o jogador quer continuar ou sair do jogo
     pergunta_atual = True  
+    ajuda_usada = False  # Controla uso de ajuda na pergunta atual
     #Se continua a responder e não digitou exit, entra no loop de respostas
     while continuar != 'exit' and pergunta_atual:  
         # Lê a resposta do jogador
         resposta = input("Qual sua resposta?! ").strip().lower()  
 
-        # Se digitou 'exit' para encerrar 
-        if resposta == 'exit':  
+        # Se digitou 'exit' ou 'parar' para encerrar 
+        if resposta == 'exit' or resposta == 'parar':  
             continuar = 'exit'  
-            # Não jhá mais respostas e pergunta atual é False
             pergunta_atual = False
 
         # Se o jogador quiser pular
@@ -78,11 +89,15 @@ while continuar != 'exit':
             else:
                 # Mensagem impressa caso não haja mais pulos 
                 print('Você não tem mais pulos!')  
+
         elif resposta == 'ajuda':
             # Se o jogador pedir ajuda
-            if ajudas > 0:
+            if ajuda_usada:
+                print('Você já usou ajuda nesta pergunta!')
+            elif ajudas > 0:
                 # diminui a quantidade de ajudas disponíveis
                 ajudas -= 1
+                ajuda_usada = True
                 # Exibe as opções erradas que podem ser descartadas
                 print(gera_ajuda(questao_inedita))
                 print(f'Você ainda tem {ajudas} ajudas!')
@@ -107,16 +122,19 @@ while continuar != 'exit':
                 # Encerra o jogo após zerar 
                 continuar = 'exit'  
             else:
-                continuar = input('Aperte ENTER para continuar ').strip().lower() 
+                continuar = input('Aperte ENTER para continuar ou digite parar para sair: ').strip().lower() 
             # Encerra a pergunta atual 
             pergunta_atual = False  
-        else:
-            # Mensagem de erro
+
+        elif resposta in ['a', 'b', 'c', 'd']:
+            # Resposta inválida para a questão atual
             print('Que pena! Você errou e vai sair sem nada :(')  
-            # Sai do jogo após erro
             continuar = 'exit' 
-            # Encerra a pergunta atual  
             pergunta_atual = False  
+
+        else:
+            # Opção inválida, permite tentar de novo
+            print('Opção inválida. Use A, B, C, D, pula, ajuda ou parar.')
 
  # Mensagem final
 if continuar == 'exit':  
