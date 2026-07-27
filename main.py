@@ -11,8 +11,8 @@ print('O jogo já vai começar! Lá vem a primeira questão!')  # Anúncio de in
 
 print('Vamos começar com questões do nível FACIL! \n Aperte ENTER para continuar... ')  # Mensagem final antes do loop
 
-#importações
-import banco_de_perguntas  # Importa o banco de perguntas
+ #importações
+from banco_de_perguntas import quest as lista_questoes  # Importa a lista de perguntas do módulo
 from questao_1 import *  
 from questao_2 import *  
 from questao_3 import *  
@@ -21,8 +21,8 @@ from questao_5 import *
 from questao_6 import *  
 from questao_7 import *
 
-#Pega o banco de questões bruto (lista) e transforma em um dicionário que divide questões por nível
-lista_questoes = banco_de_perguntas  # Recebe a lista de perguntas do módulo banco_de_perguntas
+ #Pega o banco de questões bruto (lista) e transforma em um dicionário que divide questões por nível
+ # `lista_questoes` já importada acima a partir de banco_de_perguntas.quest
 
 #Valida a base de perguntas antes de iniciar o jogo
 validacoes = valida_questoes(lista_questoes)
@@ -37,7 +37,7 @@ else:
     questoes_niveis = transforma_base(lista_questoes)  
 
 #ganhos disponíveis caso a resposta esteja certa 
-premios = [1000.00, 5000.00, 10000.00, 30000.00, 50000.00, 100000.00, 300000.00, 500000.00, 1000000.00] 
+premios = [1000.00, 5000.00, 10000.00, 30000.00, 50000.00, 100000.00, 300000.00, 500000.00, 1000000.00]
 # Índice atual na lista de prêmios
 indice_premio = -1  
 # Valor atual do prêmio do jogador
@@ -51,20 +51,28 @@ continuar = ''
 # Lista de questões já sorteadas
 lista_questoes_sorteadas = []  
 
+# Variáveis de progressão de nível (inicialmente no nível 'facil')
+niveis = ['facil', 'medio', 'dificil']
+indice_atual = 0
+nivel_atual = niveis[indice_atual]
+contou_certo = 0
+
 
 # Loop principal do jogo
 while continuar != 'exit':  
 
-    #Filtranndo as perguntas com as funções anteriores
-    questao_inedita = sorteia_questao_inedita(questoes_niveis, 'facil', lista_questoes_sorteadas)  
+    #Filtranndo as perguntas com as funções anteriores (usa nível atual)
+    questao_inedita = sorteia_questao_inedita(questoes_niveis, nivel_atual, lista_questoes_sorteadas)
     lista_questoes_sorteadas.append(questao_inedita)  
      # Exibe a questão em formato de texto
     print(questao_para_texto(questao_inedita, 1)) 
 
     # Controla para ver se o jogador quer continuar ou sair do jogo
     pergunta_atual = True  
-    ajuda_usada = False  # Controla uso de ajuda na pergunta atual
+    # Controla uso de ajuda na pergunta atual
+    ajuda_usada = False 
     #Se continua a responder e não digitou exit, entra no loop de respostas
+    
     while continuar != 'exit' and pergunta_atual:  
         # Lê a resposta do jogador
         resposta = input("Qual sua resposta?! ").strip().lower()  
@@ -107,20 +115,32 @@ while continuar != 'exit':
                 print('Você não tem mais ajudas!')
 
         # Se a resposta estiver correta
-        elif resposta == questao_inedita['correta'].lower(): 
-            # Se ainda houver ganhos maiores (o prêmio ainda pertence à lista de prêmios)
-            if indice_premio < len(premios) - 1:  
-                indice_premio += 1  
+        elif resposta == questao_inedita['correta'].lower():
+            # Atualiza índice de prêmio se houver próximo valor
+            if indice_premio < len(premios) - 1:
+                indice_premio += 1
             # Atualiza o valor do prêmio atual
-            premio_inicial = premios[indice_premio] 
-            #Atualiza o valor do ganho atual do jogador  
-            print(f'Você acertou! Seu prêmio atual é de R$ {premio_inicial:.2f}')  
+            premio_inicial = premios[indice_premio]
+            # Conta acerto para progressão de nível
+            contou_certo += 1
+            print(f'Você acertou! Seu prêmio atual é de R$ {premio_inicial:.2f}')
+
+            # Verifica se deve promover de nível (a cada 3 acertos)
+            if contou_certo >= 3:
+                if indice_atual < len(niveis) - 1:
+                    indice_atual += 1
+                    nivel_atual = niveis[indice_atual]
+                    contou_certo = 0
+                    print(f'Parabéns! Você avançou para o nível {nivel_atual.upper()}!')
+                else:
+                    # Já no nível máximo
+                    contou_certo = 0
 
             # Caso o jogador tenha zerado o jogo (ganhou o prêmio máximo)
-            if premio_inicial == 1000000.00: 
-                print('PARABÉNS, você zerou o jogo e ganhou um milhão de reais!') 
-                # Encerra o jogo após zerar 
-                continuar = 'exit'  
+            if premio_inicial == 1000000.00:
+                print('PARABÉNS, você zerou o jogo e ganhou um milhão de reais!')
+                # Encerra o jogo após zerar
+                continuar = 'exit'
             else:
                 continuar = input('Aperte ENTER para continuar ou digite parar para sair: ').strip().lower() 
             # Encerra a pergunta atual 
