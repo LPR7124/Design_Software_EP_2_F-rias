@@ -78,9 +78,16 @@ while continuar != 'exit':
         resposta = input("Qual sua resposta?! ").strip().lower()  
 
         # Se digitou 'exit' ou 'parar' para encerrar 
-        if resposta == 'exit' or resposta == 'parar':  
-            continuar = 'exit'  
-            pergunta_atual = False
+        if resposta == 'exit' or resposta == 'parar':
+            # Confirmação do jogador antes de encerrar o jogo
+            confirm = input(f'Deseja mesmo parar [S/N]?? Caso responda "S", sairá com R$ {premio_inicial:.2f}! ').strip().lower()
+            if confirm == 's':
+                print(f'Ok! Você parou e seu prêmio é de R$ {premio_inicial:.2f}')
+                continuar = 'exit'
+                pergunta_atual = False
+            else:
+                # Não confirma; continua a responder a mesma pergunta
+                print('Ok! Continuando o jogo.')
 
         # Se o jogador quiser pular
         elif resposta == 'pula':  
