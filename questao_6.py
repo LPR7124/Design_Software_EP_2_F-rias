@@ -15,6 +15,6 @@ def questao_para_texto (questao, id):
     setima = f'B: {questao["opcoes"]["B"]}\n'
     oitava = f'C: {questao["opcoes"]["C"]}\n'   
     nona = f'D: {questao["opcoes"]["D"]}\n'
-    decima = f'\n'
+    
 
-    return linhas + primeira + segunda + terceira + quarta + quinta + sexta + setima + oitava + nona + decima
+    return linhas + primeira + segunda + terceira + quarta + quinta + sexta + setima + oitava + nona 

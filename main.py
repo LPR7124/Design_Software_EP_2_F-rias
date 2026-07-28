@@ -10,7 +10,7 @@ CYAN = "\033[36m"
 BOLD = "\033[1m"
 
 print(f"{MAGENTA}Olá! Você está na Fortuna DesSoft e terá a oportunidade de enriquecer!{RESET}\n")  # Saudação inicial
-jogador = input(f"{BLUE}Qual seu nome?\n {RESET}")  # Pede o nome do jogador
+jogador = input(f"\n{BLUE}Qual seu nome? {RESET}")  # Pede o nome do jogador
 
 print(f'{GREEN}Ok {jogador.upper()}, você tem direito a pular 3 vezes e 2 ajudas! {RESET}\n')  # Informa pulos e ajudas disponíveis
 print(f'{CYAN}As opções de resposta são "A", "B", "C", "D", "ajuda", "pula", "parar" e "exit"!{RESET}\n')  # Mostra as opções válidas
