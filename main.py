@@ -28,9 +28,11 @@ from questao_7 import *
 validacoes = valida_questoes(lista_questoes)
 if any(validacoes):
     print('Base de perguntas inválida. Verifique os erros abaixo:')
-    for i, erro in enumerate(validacoes, start=1):
+    i = 1
+    for erro in validacoes:
         if erro:
             print(f'Questão {i}: {erro}')
+        i += 1
     continuar = 'exit'
 else:
     #Filtra por nível (dicionário)
@@ -56,11 +58,12 @@ while continuar != 'exit':
     contou_certo = 0
     jogo_ativo = True
 
+    numero_questao = 1
     while jogo_ativo and continuar != 'exit':
         # Filtranndo as perguntas com as funções anteriores (usa nível atual)
         questao_inedita = sorteia_questao_inedita(questoes_niveis, nivel_atual, lista_questoes_sorteadas)
         lista_questoes_sorteadas.append(questao_inedita)
-        print(questao_para_texto(questao_inedita, 1))
+        print(questao_para_texto(questao_inedita, numero_questao))
 
         pergunta_atual = True
         ajuda_usada = False
@@ -73,6 +76,18 @@ while continuar != 'exit':
                 continuar = 'exit'
                 pergunta_atual = False
                 jogo_ativo = False
+
+            elif resposta == 'parar':
+                confirmacao = input(f'Deseja mesmo parar [S/N]? Caso responda "S", sairá com R$ {premio_inicial:.2f}! ').strip().lower()
+                if confirmacao == 's':
+                    print(f'Ok! Você parou e seu prêmio é de R$ {premio_inicial:.2f}')
+                    continuar = 'exit'
+                    pergunta_atual = False
+                    jogo_ativo = False
+                elif confirmacao == 'n':
+                    print('Ok, continuando o jogo.')
+                else:
+                    print('Resposta inválida. Digite S ou N.')
 
             elif resposta == 'pula':
                 if pulos > 0:
@@ -127,7 +142,10 @@ while continuar != 'exit':
                 pergunta_atual = False
 
             else:
-                print('Opção inválida. Use A, B, C, D, pula, ajuda ou exit.')
+                print('Opção inválida. Use A, B, C, D, pula, ajuda, parar ou exit.')
+
+        if jogo_ativo and continuar != 'exit':
+            numero_questao += 1
 
     if continuar != 'exit':
         reiniciar = input('Deseja jogar novamente? Aperte ENTER para começar outra partida ou digite exit para encerrar: ').strip().lower()
