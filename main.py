@@ -1,15 +1,24 @@
 #Primeiras perguntas do jogo
 
-print("Olá! Você está na Fortuna DesSoft e terá a oportunidade de enriquecer!   ")  # Saudação inicial
-jogador = input("Qual seu nome? ")  # Pede o nome do jogador
+RESET = "\033[0m"
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+BLUE = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
+BOLD = "\033[1m"
 
-print(f'Ok {jogador.upper()}, você tem direito a pular 3 vezes e 2 ajudas! ')  # Informa pulos e ajudas disponíveis
-print('As opções de resposta são "A", "B", "C", "D", "ajuda", "pula", "parar" e "exit"!')  # Mostra as opções válidas
+print(f"{MAGENTA}Olá! Você está na Fortuna DesSoft e terá a oportunidade de enriquecer!{RESET}\n")  # Saudação inicial
+jogador = input(f"{BLUE}Qual seu nome?\n {RESET}")  # Pede o nome do jogador
 
-input('Aperte ENTER para continuar...')  # Aguarda ENTER para continuar
-print('O jogo já vai começar! Lá vem a primeira questão!')  # Anúncio de início do jogo
+print(f'{GREEN}Ok {jogador.upper()}, você tem direito a pular 3 vezes e 2 ajudas! {RESET}\n')  # Informa pulos e ajudas disponíveis
+print(f'{CYAN}As opções de resposta são "A", "B", "C", "D", "ajuda", "pula", "parar" e "exit"!{RESET}\n')  # Mostra as opções válidas
 
-print('Vamos começar com questões do nível FACIL! \n Aperte ENTER para continuar... ')  # Mensagem final antes do loop
+input('Aperte ENTER para continuar...\n')  # Aguarda ENTER para continuar
+print('O jogo já vai começar! Lá vem a primeira questão!\n')  # Anúncio de início do jogo
+
+print('Vamos começar com questões do nível FACIL! \n Aperte ENTER para continuar... \n')  # Mensagem final antes do loop
 
  #importações
 from banco_de_perguntas import quest as lista_questoes  # Importa a lista de perguntas do módulo
@@ -27,11 +36,11 @@ from questao_7 import *
 #Valida a base de perguntas antes de iniciar o jogo
 validacoes = valida_questoes(lista_questoes)
 if any(validacoes):
-    print('Base de perguntas inválida. Verifique os erros abaixo:')
+    print(f'{RED}Base de perguntas inválida. Verifique os erros abaixo:{RESET}')
     i = 1
     for erro in validacoes:
         if erro:
-            print(f'Questão {i}: {erro}')
+            print(f'{RED}Questão {i}: {erro}{RESET}\n')
         i += 1
     continuar = 'exit'
 else:
@@ -72,77 +81,77 @@ while continuar != 'exit':
             resposta = input("Qual sua resposta?! ").strip().lower()
 
             if resposta == 'exit':
-                print(f'Ok! Você saiu e seu prêmio é de R$ {premio_inicial:.2f}')
+                print(f'{YELLOW}Ok! Você saiu e seu prêmio é de R$ {premio_inicial:.2f}{RESET}')
                 continuar = 'exit'
                 pergunta_atual = False
                 jogo_ativo = False
 
             elif resposta == 'parar':
-                confirmacao = input(f'Deseja mesmo parar [S/N]? Caso responda "S", sairá com R$ {premio_inicial:.2f}! ').strip().lower()
+                confirmacao = input(f'{YELLOW}Deseja mesmo parar [S/N]? Caso responda "S", sairá com R$ {premio_inicial:.2f}! {RESET}').strip().lower()
                 if confirmacao == 's':
-                    print(f'Ok! Você parou e seu prêmio é de R$ {premio_inicial:.2f}')
+                    print(f'{GREEN}Ok! Você parou e seu prêmio é de R$ {premio_inicial:.2f}{RESET}')
                     continuar = 'exit'
                     pergunta_atual = False
                     jogo_ativo = False
                 elif confirmacao == 'n':
-                    print('Ok, continuando o jogo.')
+                    print(f'{CYAN}Ok, continuando o jogo.{RESET}')
                 else:
-                    print('Resposta inválida. Digite S ou N.')
+                    print(f'{RED}Resposta inválida. Digite S ou N.{RESET}')
 
             elif resposta == 'pula':
                 if pulos > 0:
                     pulos -= 1
-                    print(f'Ok, pulando! Você ainda tem {pulos} pulos!')
-                    input('Aperte ENTER para continuar... ')
+                    print(f'{GREEN}Ok, pulando! Você ainda tem {pulos} pulos!{RESET}')
+                    input(f'{YELLOW}Aperte ENTER para continuar... {RESET}')
                     pergunta_atual = False
                 else:
-                    print('Você não tem mais pulos!')
+                    print(f'{RED}Não deu! Você não tem mais direito a pulos!{RESET}')
 
             elif resposta == 'ajuda':
                 if ajuda_usada:
-                    print('Você já usou ajuda nesta pergunta!')
+                    print(f'{RED}Não deu! Você já pediu ajuda nesta questão!{RESET}')
                 elif ajudas > 0:
                     ajudas -= 1
                     ajuda_usada = True
-                    print(gera_ajuda(questao_inedita))
-                    print(f'Você ainda tem {ajudas} ajudas!')
-                    input('Aperte ENTER para continuar... ')
+                    print(f'{GREEN}{gera_ajuda(questao_inedita)}{RESET}')
+                    print(f'{CYAN}Você ainda tem {ajudas} ajudas!{RESET}')
+                    input(f'{YELLOW}Aperte ENTER para continuar... {RESET}')
                 else:
-                    print('Você não tem mais ajudas!')
+                    print(f'{RED}Não deu! Você não tem mais direito a ajuda!{RESET}')
 
             elif resposta == questao_inedita['correta'].lower():
                 if indice_premio < len(premios) - 1:
                     indice_premio += 1
                 premio_inicial = premios[indice_premio]
                 contou_certo += 1
-                print(f'Você acertou! Seu prêmio atual é de R$ {premio_inicial:.2f}')
+                print(f'{GREEN}Você acertou! Seu prêmio atual é de R$ {premio_inicial:.2f}{RESET}')
 
                 if contou_certo >= 3:
                     if indice_atual < len(niveis) - 1:
                         indice_atual += 1
                         nivel_atual = niveis[indice_atual]
                         contou_certo = 0
-                        print(f'Parabéns! Você avançou para o nível {nivel_atual.upper()}!')
+                        print(f'{MAGENTA}Parabéns! Você avançou para o nível {nivel_atual.upper()}!{RESET}')
                     else:
                         contou_certo = 0
 
                 if premio_inicial == 1000000.00:
-                    print('PARABÉNS, você zerou o jogo e ganhou um milhão de reais!')
+                    print(f'{BOLD}{GREEN}PARABÉNS, você zerou o jogo e ganhou um milhão de reais!{RESET}')
                     jogo_ativo = False
                 else:
-                    resposta_continuar = input('Aperte ENTER para continuar ou digite exit para sair: ').strip().lower()
+                    resposta_continuar = input(f'{YELLOW}Aperte ENTER para continuar ou digite exit para sair: {RESET}').strip().lower()
                     if resposta_continuar == 'exit':
                         continuar = 'exit'
                         jogo_ativo = False
                 pergunta_atual = False
 
             elif resposta in ['a', 'b', 'c', 'd']:
-                print('Que pena! Você errou e vai sair sem nada :(')
+                print(f'{RED}Que pena! Você errou e vai sair sem nada :({RESET}')
                 jogo_ativo = False
                 pergunta_atual = False
 
             else:
-                print('Opção inválida. Use A, B, C, D, pula, ajuda, parar ou exit.')
+                print(f'{RED}Opção inválida. Use A, B, C, D, pula, ajuda, parar ou exit.{RESET}')
 
         if jogo_ativo and continuar != 'exit':
             numero_questao += 1
